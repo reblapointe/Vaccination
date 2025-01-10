@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Vaccination.Migrations
 {
     /// <inheritdoc />
-    public partial class AjoutVacccin : Migration
+    public partial class Immunisation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,29 +25,32 @@ namespace Vaccination.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Doses",
+                name: "Immunisations",
                 columns: table => new
                 {
-                    DoseId = table.Column<int>(type: "int", nullable: false)
+                    ImmunisationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NAMPatient = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VaccinId = table.Column<int>(type: "int", nullable: false)
+                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    NomVariant = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EstSevere = table.Column<bool>(type: "bit", nullable: true),
+                    DoseId = table.Column<int>(type: "int", nullable: true),
+                    VaccinId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Doses", x => x.DoseId);
+                    table.PrimaryKey("PK_Immunisations", x => x.ImmunisationId);
                     table.ForeignKey(
-                        name: "FK_Doses_Vaccins_VaccinId",
+                        name: "FK_Immunisations_Vaccins_VaccinId",
                         column: x => x.VaccinId,
                         principalTable: "Vaccins",
-                        principalColumn: "VaccinId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "VaccinId");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Doses_VaccinId",
-                table: "Doses",
+                name: "IX_Immunisations_VaccinId",
+                table: "Immunisations",
                 column: "VaccinId");
         }
 
@@ -55,7 +58,7 @@ namespace Vaccination.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Doses");
+                name: "Immunisations");
 
             migrationBuilder.DropTable(
                 name: "Vaccins");

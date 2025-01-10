@@ -12,7 +12,9 @@ namespace Vaccination.Modeles
     {
         public DbSet<Dose> Doses { get; set; }
         public DbSet<Vaccin> Vaccins { get; set; }
-
+        public DbSet<Covid19> CasCovid { get; set; }
+        public DbSet<Immunisation> Immunisations { get; set; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=VaccinationDefi;Trusted_Connection=True;");
 

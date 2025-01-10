@@ -47,28 +47,51 @@ namespace Vaccination
                 context.Doses.Add(dose2Mylene);
                 context.Doses.Add(dose1Gaston);
                 context.SaveChanges();
-                ImprimerDoses(context.Doses);
+                ImprimerImmunisations(context.Doses);
 
                // context.Remove(dose1Gaston);    // Retrait d'une dose
                 dose1Mylene.Vaccin = p;         // Changement d'une dose
                 context.SaveChanges();
 
-                ImprimerDoses(context.Doses);
+
+                // Ajouter des cas de Covid-19
+                var covidCase1 = new Covid19
+                {
+                    Date = DateTime.Now.AddDays(-20),
+                    NAMPatient = "BHEG12345678",
+                    NomVariant = "Delta",
+                    EstSevere = false
+                };
+
+                var covidCase2 = new Covid19
+                {
+                    Date = DateTime.Now.AddDays(-15),
+                    NAMPatient = "LAPM12345678",
+                    NomVariant = "Omicron",
+                    EstSevere = true
+                };
+
+                context.CasCovid.AddRange(covidCase1, covidCase2);
+                context.SaveChanges();
+
+                // Vérifier les données enregistrées
+                
+                ImprimerImmunisations(context.Immunisations);
 
                 Console.WriteLine("Entrez un Numéro d'assurance maladie");
                 string nam = Console.ReadLine()??"";
-                var passeport = context.Doses.Where(d => d.NAMPatient == nam);
-                Console.WriteLine($"{nam} a reçu {passeport.Count()} dose(s) :");
-                ImprimerDoses(passeport);
+                var passeport = context.Immunisations.Where(d => d.NAMPatient == nam);
+                Console.WriteLine($"{nam} a reçu {passeport.Count()} immunisation(s) :");
+                ImprimerImmunisations(passeport);
             }
             Console.ReadKey();
         }
 
-        public static void ImprimerDoses(IQueryable<Dose> doses)
+        public static void ImprimerImmunisations(IQueryable<Immunisation> immunisations)
         {
-            Console.WriteLine("Doses :");
-            foreach (Dose d in doses)
-                Console.WriteLine(d);
+            Console.WriteLine("Immunisation :");
+            foreach (Immunisation i in immunisations)
+                Console.WriteLine(i);
         }
     }
 }

@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 namespace Vaccination.Modeles
 {
 
-    public class Dose
+    public class Dose : Immunisation
     {
-        public int DoseId { get; set; }
-        public DateTime Date { get; set; }
-        public required string NAMPatient { get; set; }
-
         public int? VaccinId { get; set; }
         public Vaccin? Vaccin { get; set; }
 
         public override string ToString()
         {
-            return $"Dose #{DoseId} ({Vaccin}), administré le {Date} à {NAMPatient}";
+            return $"Immunisation #{ImmunisationId} : {Vaccin}EC administré le {Date} à {NAMPatient}";
         }
     }
 

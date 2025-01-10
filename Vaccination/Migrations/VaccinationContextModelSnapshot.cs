@@ -22,29 +22,33 @@ namespace Vaccination.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Vaccination.Modeles.Dose", b =>
+            modelBuilder.Entity("Vaccination.Modeles.Immunisation", b =>
                 {
-                    b.Property<int>("DoseId")
+                    b.Property<int>("ImmunisationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoseId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImmunisationId"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("NAMPatient")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("VaccinId")
-                        .HasColumnType("int");
+                    b.HasKey("ImmunisationId");
 
-                    b.HasKey("DoseId");
+                    b.ToTable("Immunisations");
 
-                    b.HasIndex("VaccinId");
+                    b.HasDiscriminator().HasValue("Immunisation");
 
-                    b.ToTable("Doses");
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Vaccination.Modeles.Vaccin", b =>
@@ -62,6 +66,32 @@ namespace Vaccination.Migrations
                     b.HasKey("VaccinId");
 
                     b.ToTable("Vaccins");
+                });
+
+            modelBuilder.Entity("Vaccination.Modeles.Covid19", b =>
+                {
+                    b.HasBaseType("Vaccination.Modeles.Immunisation");
+
+                    b.Property<bool>("EstSevere")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NomVariant")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("Covid19");
+                });
+
+            modelBuilder.Entity("Vaccination.Modeles.Dose", b =>
+                {
+                    b.HasBaseType("Vaccination.Modeles.Immunisation");
+
+                    b.Property<int?>("VaccinId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("VaccinId");
+
+                    b.HasDiscriminator().HasValue("Dose");
                 });
 
             modelBuilder.Entity("Vaccination.Modeles.Dose", b =>
