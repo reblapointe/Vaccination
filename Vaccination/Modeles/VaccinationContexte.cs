@@ -14,7 +14,7 @@ namespace Vaccination.Modeles
         public DbSet<Vaccin> Vaccins { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Vaccination;Trusted_Connection=True;");
+            => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=VaccinationDefi;Trusted_Connection=True;");
 
     }
 }

@@ -49,11 +49,17 @@ namespace Vaccination
                 context.SaveChanges();
                 ImprimerDoses(context.Doses);
 
-                context.Remove(dose1Gaston);    // Retrait d'une dose
+               // context.Remove(dose1Gaston);    // Retrait d'une dose
                 dose1Mylene.Vaccin = p;         // Changement d'une dose
                 context.SaveChanges();
 
                 ImprimerDoses(context.Doses);
+
+                Console.WriteLine("Entrez un Numéro d'assurance maladie");
+                string nam = Console.ReadLine()??"";
+                var passeport = context.Doses.Where(d => d.NAMPatient == nam);
+                Console.WriteLine($"{nam} a reçu {passeport.Count()} dose(s) :");
+                ImprimerDoses(passeport);
             }
             Console.ReadKey();
         }
